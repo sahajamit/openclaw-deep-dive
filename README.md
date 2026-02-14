@@ -33,6 +33,7 @@ Start with the **consolidated guide** for the full picture, then drill into indi
 | 6 | [Soul & Persona](./06-soul-persona-system-prompt.md) | SOUL.md persona system, dynamic system prompt assembly, bootstrap files, identity |
 | 7 | [Memory & Sessions](./07-memory-and-sessions.md) | Memory architecture (vector + BM25 hybrid), session management, DM security |
 | 8 | [Plugins & Extensions](./08-plugin-and-extension-system.md) | 40+ hook types, 38 extensions, channel adapter pattern, Plugin SDK |
+| 9 | [Hooks, Triggers, Crons & Webhooks](./11-hooks-triggers-crons-webhooks.md) | Message triggers, heartbeats, cron jobs, webhooks, gateway hooks vs plugin hooks — the full automation layer |
 
 ### Visual References
 

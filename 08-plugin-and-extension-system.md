@@ -1,4 +1,4 @@
-[< Back to README](./README.md) | [Prev: Memory & Sessions](./07-memory-and-sessions.md) | [Consolidated Guide](./00-CONSOLIDATED-DEEP-DIVE.md)
+[< Back to README](./README.md) | [Prev: Memory & Sessions](./07-memory-and-sessions.md) | [Next: Hooks, Triggers, Crons & Webhooks](./11-hooks-triggers-crons-webhooks.md)
 
 # Plugin & Extension System
 

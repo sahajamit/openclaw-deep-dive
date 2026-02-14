@@ -22,6 +22,7 @@
 11. [Web Control UI](#11-web-control-ui)
 12. [Deployment & Operations](#12-deployment--operations)
 13. [Key Inspirations for Enterprise Builds](#13-key-inspirations-for-enterprise-builds)
+14. [Hooks, Triggers, Crons & Webhooks](#14-hooks-triggers-crons--webhooks) — [full doc](./11-hooks-triggers-crons-webhooks.md)
 
 ---
 
@@ -734,6 +735,39 @@ If you're building something similar to OpenClaw in an enterprise environment, h
 
 ---
 
+## 14. Hooks, Triggers, Crons & Webhooks
+
+> Full deep dive: [11-hooks-triggers-crons-webhooks.md](./11-hooks-triggers-crons-webhooks.md)
+
+OpenClaw has five interconnected automation systems beyond "message in → reply out":
+
+### Message Triggers
+
+The auto-reply engine decides if and how to respond. Trigger types: **DMs** (always if authorized), **@mentions** (group chats), **reply-to** (replying to agent), **slash commands** (`/new`, `/stop`, `/model`). Inbound debouncing batches rapid messages. Send policy controls delivery (`allow`/`deny`/`ask`).
+
+### Heartbeats
+
+Periodic agent turns (default every 30 min) in the main session. The agent reads `HEARTBEAT.md`, checks for urgent items, and replies `HEARTBEAT_OK` (silently dropped) or delivers an alert. Configurable active hours, custom prompts, and per-channel targets.
+
+### Cron Jobs
+
+Gateway's built-in scheduler. Three schedule types: **one-shot** (`at`), **interval** (`every`), **cron expression** (5-field + timezone). Two session targets: **main** (queue system event) or **isolated** (fresh agent turn). Delivery modes: **announce** (send to channel) or **none** (internal only).
+
+### Webhooks
+
+External HTTP triggers: `POST /hooks/wake` (nudge main session) and `POST /hooks/agent` (run isolated task). Token-authenticated, rate-limited, with custom endpoint mappings and security policies.
+
+### Gateway Hooks vs Plugin Hooks
+
+| Type | Events | Use Case |
+|------|--------|----------|
+| **Gateway hooks** | `command:new/reset/stop`, `agent:bootstrap`, `gateway:startup` | Session memory, command logging, bootstrap injection, boot scripts |
+| **Plugin hooks** | `gateway_start/stop`, `tool_result_persist` | Plugin lifecycle, tool result transformation |
+
+Bundled hooks: **session-memory** (saves context before `/new`), **command-logger** (audit trail), **bootstrap-extra-files** (inject files via glob), **boot-md** (run script at startup).
+
+---
+
 ## File Index
 
 | File                                                                       | Description                                              |
@@ -748,6 +782,7 @@ If you're building something similar to OpenClaw in an enterprise environment, h
 | [`08-plugin-and-extension-system.md`](./08-plugin-and-extension-system.md) | Plugins, extensions, channel adapters                    |
 | [`09-openclaw-mindmap.mm.md`](./09-openclaw-mindmap.mm.md)                 | Markmap mindmap of all concepts                          |
 | [`10-component-connections.puml`](./10-component-connections.puml)         | PlantUML component diagram                               |
+| [`11-hooks-triggers-crons-webhooks.md`](./11-hooks-triggers-crons-webhooks.md) | Hooks, triggers, heartbeats, crons, webhooks         |
 
 ---
 

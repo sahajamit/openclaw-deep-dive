@@ -157,6 +157,51 @@
 - Public API for developers
 - TypeScript declarations
 
+## Automation Layer
+### Message Triggers
+- DM triggers (always if authorized)
+- @mention triggers (group chats)
+- Reply-to triggers
+- Slash commands (/new, /stop, /model)
+- Inbound debouncing
+- Send policy (allow/deny/ask)
+- Queue modes (steer/followup/collect/interrupt)
+
+### Heartbeats
+- Periodic agent turns (default 30m)
+- HEARTBEAT.md workspace file
+- HEARTBEAT_OK silent token
+- Active hours window
+- Wake reasons & priority
+- Per-channel targets
+
+### Cron Jobs
+- One-shot (at: relative/absolute)
+- Interval (every: duration)
+- Cron expression (5-field + timezone)
+- Main session (system events)
+- Isolated session (fresh agent turns)
+- Delivery modes (announce/none)
+- State tracking & backoff
+
+### Webhooks
+- POST /hooks/wake (nudge main session)
+- POST /hooks/agent (isolated run)
+- Custom endpoint mappings
+- Token authentication
+- Rate limiting
+- Session key policies
+
+### Gateway Hooks
+- command:new, command:reset, command:stop
+- agent:bootstrap (mutate bootstrap files)
+- gateway:startup (run boot scripts)
+- Bundled: session-memory, command-logger, boot-md, bootstrap-extra-files
+
+### Plugin Hooks
+- gateway_start / gateway_stop
+- tool_result_persist (synchronous transform)
+
 ## Infrastructure
 ### Storage
 - Sessions (JSONL files)
