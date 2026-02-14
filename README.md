@@ -62,6 +62,14 @@ The [consolidated guide](./00-CONSOLIDATED-DEEP-DIVE.md) has a full "Key Inspira
 
 ---
 
+## Video Walkthrough
+
+[![OpenClaw Deep Dive](https://img.youtube.com/vi/FNQBL65c5CU/maxresdefault.jpg)](https://www.youtube.com/watch?v=FNQBL65c5CU)
+
+A video walkthrough of this deep dive, generated using NotebookLM. [Watch on YouTube →](https://www.youtube.com/watch?v=FNQBL65c5CU)
+
+---
+
 ## About
 
 - **Source project**: [OpenClaw](https://github.com/openclaw/openclaw) (v2026.2.13)
