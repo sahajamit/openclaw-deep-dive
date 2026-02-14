@@ -1,0 +1,146 @@
+@startuml OpenClaw Component Architecture
+
+!define RECTANGLE class
+
+skinparam componentStyle uml2
+skinparam backgroundColor white
+skinparam component {
+  BackgroundColor LightBlue
+  BorderColor DarkBlue
+}
+
+title OpenClaw - Component Connection Diagram
+
+package "Control Plane" {
+  [macOS App] as mac
+  [iOS/Android App] as mobile
+  [Web Control UI] as webui
+  [CLI] as cli
+}
+
+package "Gateway (Daemon)" {
+  [WebSocket Server] as ws
+  [HTTP Server] as http
+  [Config Manager] as config
+  [Auth Manager] as auth
+  [Plugin System] as plugins
+  [Model Catalog] as catalog
+
+  package "Channel Manager" {
+    [WhatsApp\n(Baileys)] as wa
+    [Telegram\n(grammY)] as tg
+    [Discord\n(discord.js)] as disc
+    [Slack\n(Bolt)] as slack
+    [Signal] as signal
+    [iMessage] as imsg
+    [Extensions\n(12+ more)] as ext
+  }
+
+  package "Auto-Reply Engine" {
+    [Message Processor] as msgproc
+    [Command Parser] as cmdparse
+    [Trigger Detector] as trigger
+    [Queue System] as queue
+  }
+
+  package "Agent Runtime" {
+    [System Prompt Builder] as sysprompt
+    [Session Manager] as session
+    [Tool Executor] as tools
+    [Skills Manager] as skills
+    [Pi-Agent-Core] as picore
+  }
+
+  package "Storage" {
+    [Session Store\n(JSONL)] as sessstore
+    [Memory Index\n(SQLite+vec)] as memidx
+    [Config Store\n(JSON5)] as confstore
+    [Auth Profiles\n(JSON)] as authstore
+  }
+}
+
+package "AI Model Providers" {
+  [Anthropic\n(Claude)] as claude
+  [OpenAI\n(GPT)] as openai
+  [Google\n(Gemini)] as gemini
+  [Ollama\n(Local)] as ollama
+  [OpenRouter] as openrouter
+}
+
+package "Workspace" {
+  [SOUL.md] as soul
+  [IDENTITY.md] as identity
+  [AGENTS.md] as agents
+  [MEMORY.md] as memory
+  [memory/*.md] as dailymem
+  [Skills/\nSKILL.md] as skillfiles
+}
+
+' Control Plane connections
+mac --> ws : WebSocket
+mobile --> ws : WebSocket
+webui --> http : HTTP
+webui --> ws : WebSocket
+cli --> ws : WebSocket
+
+' Gateway internal
+ws --> msgproc
+ws --> session
+http --> webui
+
+' Channel connections
+wa --> msgproc : inbound msg
+tg --> msgproc : inbound msg
+disc --> msgproc : inbound msg
+slack --> msgproc : inbound msg
+signal --> msgproc : inbound msg
+imsg --> msgproc : inbound msg
+ext --> msgproc : inbound msg
+
+' Auto-reply flow
+msgproc --> cmdparse
+cmdparse --> trigger
+trigger --> queue
+queue --> picore
+
+' Agent runtime
+picore --> sysprompt : build prompt
+picore --> tools : execute tools
+picore --> session : manage context
+skills --> sysprompt : inject skills
+
+' Model calls
+picore --> claude : API call
+picore --> openai : API call
+picore --> gemini : API call
+picore --> ollama : native API
+picore --> openrouter : API call
+catalog --> picore : model selection
+auth --> picore : credentials
+
+' Storage
+session --> sessstore : read/write
+memidx --> memory : index
+memidx --> dailymem : index
+config --> confstore : load/reload
+auth --> authstore : load
+
+' Workspace injection
+soul --> sysprompt : inject persona
+identity --> sysprompt : inject identity
+agents --> sysprompt : inject instructions
+memory --> sysprompt : inject memory
+skillfiles --> skills : load skills
+
+' Reply delivery
+picore --> wa : outbound reply
+picore --> tg : outbound reply
+picore --> disc : outbound reply
+picore --> slack : outbound reply
+
+' Plugin system
+plugins --> picore : hooks
+plugins --> msgproc : hooks
+plugins --> session : hooks
+
+@enduml
